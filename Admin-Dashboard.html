@@ -16,7 +16,7 @@
 
     <aside class="admin-sidebar">
         <div class="sidebar-logo">
-            <img src="Images/Screenshot 2024-12-31 233611.png" alt="happy" >
+            <img src="Images/hospitallogo.png" alt="happy" >
         </div>
         <nav class="sidebar-nav">
             <!--Primary top nav-->
@@ -57,8 +57,6 @@
                         <span class="nav-label">Reports</span>
                     </a>
                 </li>
-                
-                
             </ul>
             <!--Secondary bottom nav-->
             <ul class="secondary-buttom-nav">
@@ -75,24 +73,49 @@
                     </a>
                 </li>
             </ul>
-
-            
         </nav>
-
     </aside>
     <main class="admin-main">
-        <div class="banner-card"></div>
+        <div class="banner-card">
+            <h1>Welcome to Admin Dashboard</h1>
+            <h4>Overview of statistics</h4>
+        </div>
         <div class="employee-card">
             <i class="fa-solid fa-user-group"></i>
             <label for="employees" class="employee-label">Employees</label>
             <h3 class="employee-count">0</h3>
         </div>
-        <div class="applicant-card"></div>
-        <div class="request-card"></div>
-        <div class="hiring-card"></div>
-        <div class="recent-job-post-card"></div>
-        <div class="newly-hired-card"></div>
+        <div class="applicant-card">
+            <i class="fa-solid fa-user-group"></i>
+            <label for="applicants" class="applicant-label">Applicants</label>
+            <h3 class="applicant-count">0</h3>
+        </div>
+        <div class="request-card">
+            <i class="fa-solid fa-code-pull-request"></i>
+            <label for="requests" class="request-label">Requests</label>
+            <h3 class="request-count">0</h3>
+        </div>
+        <div class="hiring-card">
+            <i class="fa-solid fa-folder"></i>
+            <label for="hirings" class="hiring-label">Hiring</label>
+            <h3 class="hiring-count">0</h3>
+        </div>
+        <div class="recent-job-post-header">
+            <i class="fa-solid fa-folder"></i>
+            <label for="recent-job-post" class="recent-job-post-label">Recent Job Posts</label>
+        </div>
+        <div class="recent-job-post-card">
+            <h3>Test</h3>
+        </div>
+        <div class="newly-hired-header">
+            <i class="fa-solid fa-user-group"></i>
+            <label for="newly-hired" class="newly-hired-label">Newly Hired</label>
+        </div>
+        <div class="newly-hired-card">
+            <div class="sub-newly-hired-card"></div>
+            <div class="sub-newly-hired-card"></div>
 
+        </div>
     </main>
     
 </body>

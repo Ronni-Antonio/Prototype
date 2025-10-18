@@ -1,5 +1,3 @@
-
-
 /*Poppins font import*/
 @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 
@@ -138,8 +136,8 @@ input[type="checkbox"]{
 }
 
 .admin-header{
-    background-color: #CEE3F5;
     grid-area: header;
+    padding: 5px;
 }
 
 .admin-sidebar{
@@ -147,11 +145,25 @@ input[type="checkbox"]{
     grid-area:side;
 }
 
+.sidebar-logo{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sidebar-logo img{
+    margin-top: 20px;
+    height: 200px;
+    width: 200px;
+}
+
 .admin-header-text{
     font-family: "Poppins", sans-serif;
     font-weight: 700;
     font-style: normal;
     padding: 20px;
+    font-size: 40px;
+    margin-top: 15px;
 
 }
 
@@ -175,116 +187,143 @@ input[type="checkbox"]{
     padding: 4px;
 }
 
-
 .admin-main{
-    background-color: #F5F8FF;
     padding: 25px;
     grid-area: main;
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: repeat(5, 1fr);
-    gap: 20px;
+    grid-template-rows: auto;
+    gap: 35px;
+    margin: 15px;
 }
 
 .banner-card{
     grid-column: 1/3;
     grid-row: 1/2;
-    background-color: #7D7EC2;
+    background-color: #6E7BED;
+    border-radius: 20px;
+    padding: 40px;
     
 }
 
 .employee-card{
     grid-column: 1/2;
     grid-row: 2/3;
-    background-color: #CEE3F5;
+    background-color: #dfe0ed;
     border-radius: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 20px;
+    width: 480px;
+    height: 139px;
+    margin-left:120px;
 }
 
-.employee-card .fa-solid{
+.admin-main .fa-solid{
+    height: 20px;
+    width: 20px;
     color: #1E3A8A;
 }
 
-.employee-label{
-    font-size: 24px;
+.admin-main h1, .admin-main h4{
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    color: white;
+}
+
+.admin-main label{
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 40px;
     margin: 20px;
 }
 
-.employee-count{
-    font-size: 24px;
+.admin-main h3{
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-style: normal;
+    font-size: 46px;
     margin: 20px;
 }
 
 .applicant-card{
     grid-column: 2/3;
     grid-row: 2/3;
-    background-color: #CEE3F5;
+    background-color: #dfe0ed;
     border-radius: 20px;    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 480px;
+    height: 139px;
+    margin-left:120px;
 }
 
 .request-card{
     grid-column: 1/2;
     grid-row: 3/4;
-    background-color: #CEE3F5;
+    background-color: #dfe0ed;
     border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 480px;
+    height: 139px;
+    margin-left:120px;
 }
 
 .hiring-card{
     grid-column: 2/3;
     grid-row: 3/4;
-    background-color: #CEE3F5;
+    background-color: #dfe0ed;
     border-radius: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    width: 480px;
+    height: 139px;
+    margin-left:120px;
+}
+
+.recent-job-post-header{
+    background-color: white;
+    grid-column: 1/3;
+    grid-row: 4/5;
 }
 
 .recent-job-post-card{
     grid-column: 1/3;
-    grid-row: 4/5;
-    background-color: #7D7EC2;
+    grid-row: 5/6;
+    background-color: #6E7BED;
+}
+
+.newly-hired-header{
+    grid-column: 1/3;
+    grid-row: 6/7;
+    background-color: white;
 }
 
 .newly-hired-card{
     grid-column: 1/3;
-    grid-row: 5/6;
-    background-color: #7D7EC2;
+    grid-row: 7/8;
+    background-color: #6E7BED;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: auto;
+    grid-template-areas: 
+    "newly-hired-1 newly-hired-2";
 }
 
-
-/*
-.cards:nth-child(1){
-    grid-area: banner;
+.sub-newly-hired-card{
+    background-color: #D9D9D9;
+    grid-area: newly-hired-1;
 }
-.cards:nth-child(2){
-    grid-area: banner;
-}
-.cards:nth-child(3){
-    grid-area: employee;
-}
-.cards:nth-child(4){
-    grid-area: applicant;
-}
-.cards:nth-child(5){
-    grid-area: request;
-}
-.cards:nth-child(6){
-    grid-area: hiring;
-}
-.cards:nth-child(7){
-    grid-area: jobpost;
-}
-.cards:nth-child(8){
-    grid-area: jobpost;
-}
-.cards:nth-child(9){
-    grid-area: hired;
-}
-.cards:nth-child(10){
-    grid-area: hired;
-}
-*/
-
 
 .sidebar-nav .nav-link{
     color: black;

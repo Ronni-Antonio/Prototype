@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Employee Management</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.1/css/all.min.css" integrity="sha512-2SwdPD6INVrV/lHTZbO2nodKhrnDdJK9/kg2XD1r9uGqPo1cUbujc+IYdlYdEErWNu69gVcYgdxlmVmzTWnetw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .admin-sidebar {
+            width: 200px;
+            background: linear-gradient(180deg, #1e3a8a 0%, #1e40af 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sidebar-logo {
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .sidebar-logo img {
+            max-width: 100%;
+            height: auto;
+        }
+
+        .sidebar-nav {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 20px 0;
+        }
+
+        .primary-top-nav,
+        .secondary-buttom-nav {
+            list-style: none;
+        }
+
+        .nav-item {
+            margin-bottom: 5px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: background 0.3s;
+            color: white;
+            text-decoration: none;
+        }
+
+        .nav-link:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .nav-item:has(.nav-link.active) .nav-link {
+            background: rgba(255,255,255,0.15);
+            border-left: 3px solid #60a5fa;
+        }
+
+        .nav-link i {
+            width: 20px;
+            text-align: center;
+            font-size: 16px;
+        }
+
+        .nav-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .main-content {
+            flex: 1;
+            background: #f3f4f6;
+            overflow-y: auto;
+            padding: 30px;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header-title h1 {
+            font-size: 28px;
+            color: #1e40af;
+            font-weight: 700;
+        }
+
+        .add-btn {
+            background: #1e40af;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .add-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .controls {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            align-items: center;
+        }
+
+        .search-box {
+            flex: 1;
+            position: relative;
+            max-width: 350px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 10px 40px 10px 40px;
+            border: 1px solid #d1d5db;
+            border-radius: 25px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .search-box input:focus {
+            border-color: #1e40af;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6b7280;
+        }
+
+        .filter-btn, .export-btn {
+            padding: 10px 20px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s;
+        }
+
+        .filter-btn:hover, .export-btn:hover {
+            border-color: #1e40af;
+            color: #1e40af;
+        }
+
+        .export-btn i {
+            font-size: 16px;
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        thead {
+            background: #1e40af;
+            color: white;
+        }
+
+        th {
+            padding: 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 13px;
+            border-radius: 8px;
+        }
+
+        tbody tr {
+            background: #3b82f6;
+            color: white;
+            border-bottom: 8px solid #f3f4f6;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        tbody tr:hover {
+            background: #2563eb;
+        }
+
+        td {
+            padding: 15px;
+            font-size: 13px;
+        }
+
+        .action-btns {
+            display: flex;
+            gap: 8px;
+        }
+
+        .edit-btn, .delete-btn {
+            width: 32px;
+            height: 32px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: transform 0.2s;
+            font-size: 14px;
+        }
+
+        .edit-btn {
+            background: #fbbf24;
+            color: white;
+        }
+
+        .delete-btn {
+            background: #ef4444;
+            color: white;
+        }
+
+        .edit-btn:hover, .delete-btn:hover {
+            transform: scale(1.1);
+        }
+
+        /* Employee Profile Styles */
+        .profile-container {
+            display: none;
+        }
+
+        .profile-container.active {
+            display: block;
+        }
+
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .profile-title {
+            font-size: 28px;
+            color: #1e40af;
+            font-weight: 700;
+        }
+
+        .export-as-btn {
+            padding: 10px 20px;
+            border: 1px solid #d1d5db;
+            background: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .profile-card {
+            background: #3b82f6;
+            border-radius: 12px;
+            padding: 30px;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .profile-top {
+            display: flex;
+            gap: 30px;
+            margin-bottom: 30px;
+            align-items: flex-start;
+        }
+
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar i {
+            font-size: 50px;
+            color: #3b82f6;
+        }
+
+        .profile-info h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .profile-info p {
+            margin-bottom: 5px;
+            font-size: 14px;
+        }
+
+        .profile-info a {
+            color: white;
+            text-decoration: underline;
+        }
+
+        .profile-form {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group label {
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select {
+            padding: 10px 15px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .reset-btn, .save-btn {
+            padding: 12px 30px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .reset-btn {
+            background: #dc2626;
+            color: white;
+        }
+
+        .reset-btn:hover {
+            background: #b91c1c;
+        }
+
+        .save-btn {
+            background: #16a34a;
+            color: white;
+        }
+
+        .save-btn:hover {
+            background: #15803d;
+        }
+
+        .back-btn {
+            padding: 12px 30px;
+            background: #1e40af;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 150px;
+        }
+
+        .back-btn:hover {
+            background: #1e3a8a;
+        }
+
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <aside class="admin-sidebar">
+        <div class="sidebar-logo">
+            <img src="Images/Screenshot 2024-12-31 233611.png" alt="Hospital Logo">
+        </div>
+        <nav class="sidebar-nav">
+            <ul class="primary-top-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-grip"></i>
+                        <span class="nav-label">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span class="nav-label">Employees</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-user-group"></i>
+                        <span class="nav-label">Applicants</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-code-pull-request"></i>
+                        <span class="nav-label">Requests</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-folder"></i>
+                        <span class="nav-label">Job Post</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-chart-simple"></i>
+                        <span class="nav-label">Reports</span>
+                    </a>
+                </li>
+            </ul>
+            
+            <ul class="secondary-buttom-nav">
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-gear"></i>
+                        <span class="nav-label">Settings</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <span class="nav-label">Logout</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+    </aside>
+
+    <div class="main-content">
+        <!-- Employee List View -->
+        <div id="employeeListView">
+            <div class="header">
+                <div class="header-title">
+                    <h1>Employee List</h1>
+                </div>
+                <button class="add-btn">+ Add Employee</button>
+            </div>
+
+            <div class="controls">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                    <input type="text" placeholder="Search Employee" id="searchInput">
+                </div>
+                <button class="filter-btn">
+                    Filter <i class="fa-solid fa-filter"></i>
+                </button>
+                <button class="export-btn">
+                    Export As 
+                    <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i>
+                    <i class="fa-solid fa-file-excel" style="color: #10b981;"></i>
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Full Name</th>
+                            <th>Department</th>
+                            <th>Position</th>
+                            <th>Employment Type</th>
+                            <th>Email Address</th>
+                            <th>Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="employeeTable">
+                        <tr onclick="showProfile('25-0001', 'Garabillo, Jojana Jean', 'Medical', 'Cardiologist Doctor', 'Regular', 'garabillo_jojana@gmail.com')">
+                            <td>25-0001</td>
+                            <td>Garabillo, Jojana Jean</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0002', 'Cacho, Shane Ella Mae', 'Admin', 'Admin Moderator', 'Regular', 'cacho_shane@gmail.com')">
+                            <td>25-0002</td>
+                            <td>Cacho, Shane Ella Mae</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0003', 'Gutierrez, Jodie Lyn', 'Admin', 'Admin Moderator', 'Regular', 'gutierrez_jodie@gmail.com')">
+                            <td>25-0003</td>
+                            <td>Gutierrez, Jodie Lyn</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0004', 'Jaroda, Jhanna Rayne', 'Admin', 'Admin Moderator', 'Regular', 'jaroda_jhanna@gmail.com')">
+                            <td>25-0004</td>
+                            <td>Jaroda, Jhanna Rayne</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0005', 'Antonio, Rhoanne Nicole', 'Admin', 'Admin Moderator', 'Regular', 'antonio_rhoanne@gmail.com')">
+                            <td>25-0005</td>
+                            <td>Antonio, Rhoanne Nicole</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0006', 'Garabillo, Jojana Jean', 'Admin', 'Admin Moderator', 'Regular', 'garabillo_jojana@gmail.com')">
+                            <td>25-0006</td>
+                            <td>Garabillo, Jojana Jean</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0007', 'Garabillo, Jojana Jean', 'Admin', 'Admin Moderator', 'Regular', 'garabillo_jojana@gmail.com')">
+                            <td>25-0007</td>
+                            <td>Garabillo, Jojana Jean</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0008', 'Garabillo, Jojana Jean', 'Admin', 'Admin Moderator', 'Regular', 'garabillo_jojana@gmail.com')">
+                            <td>25-0008</td>
+                            <td>Garabillo, Jojana Jean</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0009', 'Garabillo, Jojana Jean', 'Admin', 'Admin Moderator', 'Regular', 'garabillo_jojana@gmail.com')">
+                            <td>25-0009</td>
+                            <td>Garabillo, Jojana Jean</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr onclick="showProfile('25-0010', 'Garabillo, Jojana Jean', 'Admin', 'Admin Moderator', 'Regular', 'garabillo_jojana@gmail.com')">
+                            <td>25-0010</td>
+                            <td>Garabillo, Jojana Jean</td>
+                            <td>Admin</td>
+                            <td>Admin Moderator</td>
+                            <td>Regular</td>
+                            <td>garabillo_jojana@gmail.com</td>
+                            <td>
+                                <div class="action-btns">
+                                    <button class="edit-btn" onclick="event.stopPropagation()"><i class="fa-solid fa-pen"></i></button>
+                                    <button class="delete-btn" onclick="event.stopPropagation(); deleteEmployee(this)"><i class="fa-solid fa-trash"></i></button>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Employee Profile View -->
+        <div id="employeeProfileView" class="profile-container">
+            <div class="profile-header">
+                <h1 class="profile-title">Employee Profile</h1>
+                <button class="export-as-btn">
+                    Export As
+                    <i class="fa-solid fa-file-pdf" style="color: #ef4444;"></i>
+                    <i class="fa-solid fa-file-image" style="color: #6b7280;"></i>
+                </button>
+            </div>
+
+            <div class="profile-card">
+                <div class="profile-top">
+                    <div class="profile-avatar">
+                        <i class="fa-solid fa-user"></i>
+                    </div>
+                    <div class="profile-info">
+                        <h2 id="profileName">RIVER FUENTABELLA</h2>
+                        <p><strong>Position:</strong> <a href="#" id="profilePosition">Cardiologist Doctor</a></p>
+                        <p><strong>Department:</strong> <span id="profileDepartment">Medical</span></p>
+                        <p><strong>Employment Status:</strong> <span id="profileStatus">Regular</span></p>
+                        <p><strong>Employee ID:</strong> <span id="profileId">25-0001</span></p>
+                    </div>
+                </div>
+
+                <div class="profile-form">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" id="fullName" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Employee ID</label>
+                        <input type="text" id="employeeId" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Position</label>
+                        <input type="text" id="position" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Department</label>
+                        <select id="department">
+                            <option value="">Select Department</option>
+                            <option value="Admin">Admin</option>
+                            <option value="Medical">Medical</option>
+                            <option value="Nursing">Nursing</option>
+                            <option value="HR">HR</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Employment Status</label>
+                        <select id="employmentStatus">
+                            <option value="">Select Status</option>
+                            <option value="Regular">Regular</option>
+                            <option value="Probationary">Probationary</option>
+                            <option value="Contract">Contract</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Email Address</label>
+                        <input type="email" id="email" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Date of Birth</label>
+                        <input type="date" id="dob" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select id="gender">
+                            <option value="">Select Gender</option>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Home Address</label>
+                        <input type="text" id="homeAddress" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Contact Number</label>
+                        <input type="text" id="contactNumber" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Emergency Contact Number</label>
+                        <input type="text" id="emergencyContact" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>TIN Number</label>
+                        <input type="text" id="tinNumber" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>PhilHealth Number</label>
+                        <input type="text" id="philhealth" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>SSS Number</label>
+                        <input type="text" id="sssNumber" value="">
+                    </div>
+                    <div class="form-group">
+                        <label>Pag-ibig Number</label>
+                        <input type="text" id="pagibig" value="">
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button class="reset-btn" onclick="resetForm()">Reset</button>
+                    <button class="save-btn" onclick="saveProfile()">SAVE</button>
+                </div>
+            </div>
+
+            <button class="back-btn" onclick="showEmployeeList()">Back</button>
+        </div>
+    </div>
+
+    <script>
+        // Search functionality
+        const searchInput = document.getElementById('searchInput');
+        const table = document.getElementById('employeeTable');
+        const rows = table.getElementsByTagName('tr');
+
+        searchInput.addEventListener('keyup', function() {
+            const filter = searchInput.value.toLowerCase();
+            
+            for (let i = 0; i < rows.length; i++) {
+                const cells = rows[i].getElementsByTagName('td');
+                let found = false;
+                
+                for (let j = 0; j < cells.length; j++) {
+                    if (cells[j].textContent.toLowerCase().indexOf(filter) > -1) {
+                        found = true;
+                        break;
+                    }
+                }
+                
+                rows[i].style.display = found ? '' : 'none';
+            }
+        });
+
+        // Show Profile Function
+        function showProfile(id, name, dept, pos, status, email) {
+            document.getElementById('employeeListView').classList.add('hidden');
+            document.getElementById('employeeProfileView').classList.add('active');
+            
+            // Update profile header info
+            document.getElementById('profileName').textContent = name.toUpperCase();
+            document.getElementById('profilePosition').textContent = pos;
+            document.getElementById('profileDepartment').textContent = dept;
+            document.getElementById('profileStatus').textContent = status;
+            document.getElementById('profileId').textContent = id;
+            
+            // Update form fields
+            document.getElementById('fullName').value = name;
+            document.getElementById('employeeId').value = id;
+            document.getElementById('position').value = pos;
+            document.getElementById('department').value = dept;
+            document.getElementById('employmentStatus').value = status;
+            document.getElementById('email').value = email;
+            
+            // Scroll to top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        // Show Employee List Function
+        function showEmployeeList() {
+            document.getElementById('employeeProfileView').classList.remove('active');
+            document.getElementById('employeeListView').classList.remove('hidden');
+            
+            // Scroll to top
+            document.querySelector('.main-content').scrollTop = 0;
+        }
+
+        // Delete Employee Function
+        function deleteEmployee(btn) {
+            if (confirm('Are you sure you want to delete this employee?')) {
+                btn.closest('tr').remove();
+            }
+        }
+
+        // Reset Form Function
+        function resetForm() {
+            const form = document.querySelector('.profile-form');
+            const inputs = form.querySelectorAll('input, select');
+            inputs.forEach(input => {
+                if (input.type === 'text' || input.type === 'email' || input.type === 'date') {
+                    input.value = '';
+                } else if (input.tagName === 'SELECT') {
+                    input.selectedIndex = 0;
+                }
+            });
+        }
+
+        // Save Profile Function
+        function saveProfile() {
+            alert('Profile saved successfully!');
+        }
+
+        // Edit button functionality
+        document.querySelectorAll('.edit-btn').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                alert('Edit functionality - opens the profile in edit mode');
+            });
+        });
+
+        // Add Employee button
+        document.querySelector('.add-btn').addEventListener('click', function() {
+            alert('Add Employee form would open here');
+        });
+    </script>
+</body>
+</html>
